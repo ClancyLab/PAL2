@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bayesian Optimization Configuration &mdash; PAL 2.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/hacks.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Predictive Inference Configuration" href="pi_config.html" />
+    <link rel="prev" title="Pipeline Configuration" href="configuration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            PAL
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About PAL 2.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Pipeline Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Bayesian Optimization Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#bayesian-optimization-attributes">Bayesian Optimization Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gp-model-selection-attributes">GP Model Selection Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gp-model-attributes">GP Model Attributes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#learning-rates">Learning rates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#epochs">Epochs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#neural-network-attributes">Neural Network Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acquisition-attributes">Acquisition Attributes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pi_config.html">Predictive Inference Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">Running PAL 2.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PAL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Bayesian Optimization Configuration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/bo_config.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="bayesian-optimization-configuration">
+<h1>Bayesian Optimization Configuration<a class="headerlink" href="#bayesian-optimization-configuration" title="Permalink to this heading"></a></h1>
+<p>Given below are the attributes needed for performing Bayesian Optimization:</p>
+<section id="bayesian-optimization-attributes">
+<h2>Bayesian Optimization Attributes<a class="headerlink" href="#bayesian-optimization-attributes" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><span class="bglb">n_trials</span></dt><dd><ul>
+<li><p>Number of repeats of the Bayesian Optimization process to gain convergence information of the performance of different models.</p></li>
+<li><p>Every trial is set to a different random seed which results in different sets of initial data used to initiate training of surrogate models before starting off the Bayesian Optimization iterations.</p></li>
+<li><p>Values = Integer value greater than 0</p></li>
+<li><p>Default value = 50</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">n_update</span></dt><dd><ul>
+<li><p>Number of Bayesian Optimization iterations at which we want to update our surrogate models.</p></li>
+<li><p>Values = Integer value greater than 1</p></li>
+<li><p>Default value = 10</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">random_seed</span></dt><dd><ul>
+<li><p>Choice for choosing the random seed to initialize the initial training dataset.</p></li>
+<li><p><em>iteration</em> for trial number or <em>time</em> for CPU clock time.</p></li>
+<li><p>Values = iteration, time</p></li>
+<li><p>Default value = iteration</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="gp-model-selection-attributes">
+<h2>GP Model Selection Attributes<a class="headerlink" href="#gp-model-selection-attributes" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><span class="bglb">GP_0_BO</span></dt><dd><ul>
+<li><p>Set to True if we want to run Bayesian Optimization for a Gaussian Process surrogate with 0-prior mean</p></li>
+<li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
+<li><p>Default value = <span class="lime">True</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">GP_C_BO</span></dt><dd><ul>
+<li><p>Set to True if we want to run Bayesian Optimization for a Gaussian Process surrogate with constant function prior mean</p></li>
+<li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
+<li><p>Default value = <span class="lime">True</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">GP_L_BO</span></dt><dd><ul>
+<li><p>Set to True if we want to run Bayesian Optimization for a Gaussian Process surrogate with linear function prior mean</p></li>
+<li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
+<li><p>Default value = <span class="lime">True</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">GP_NN_BO</span></dt><dd><ul>
+<li><p>Set to True if we want to run Bayesian Optimization for a Gaussian Process surrogate with Neural Network prior mean</p></li>
+<li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
+<li><p>Default value = <span class="lime">True</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="gp-model-attributes">
+<h2>GP Model Attributes<a class="headerlink" href="#gp-model-attributes" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><span class="bglb">kernel</span></dt><dd><ul>
+<li><p>Choice of the kernel for the Gaussian Process models.</p></li>
+<li><p>Values = Matern, RBF</p></li>
+<li><p>Default value = Matern</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<section id="learning-rates">
+<h3>Learning rates<a class="headerlink" href="#learning-rates" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><dl class="simple">
+<dt><span class="bglb">learning_rate_gp0</span></dt><dd><ul>
+<li><p>Learning rate for training the Gaussian Process with 0-prior mean model</p></li>
+<li><p>Values = Floating point in (0,1)</p></li>
+<li><p>Default value = 0.1</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">learning_rate_gpC</span></dt><dd><ul>
+<li><p>Learning rate for training the Gaussian Process with constant function prior mean model</p></li>
+<li><p>Values = Floating point in (0,1)</p></li>
+<li><p>Default value = 0.1</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">learning_rate_gpL</span></dt><dd><ul>
+<li><p>Learning rate for training the Gaussian Process with linear function prior mean model</p></li>
+<li><p>Values = Floating point in (0,1)</p></li>
+<li><p>Default value = 0.1</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">learning_rate_gpNN</span></dt><dd><ul>
+<li><p>Learning rate for training the Gaussian Process with Neural Network prior mean model</p></li>
+<li><p>Values = Floating point in (0,1)</p></li>
+<li><p>Default value = 0.01</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="epochs">
+<h3>Epochs<a class="headerlink" href="#epochs" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><dl class="simple">
+<dt><span class="bglb">epochs_gp0</span></dt><dd><ul>
+<li><p>Number of training epochs for training the Gaussian Process with 0-prior mean model</p></li>
+<li><p>Values = Integer value greater than 0</p></li>
+<li><p>Default value = 100</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">epochs_gpC</span></dt><dd><ul>
+<li><p>Number of training epochs for training the Gaussian Process with constant function prior mean model</p></li>
+<li><p>Values = Integer value greater than 0</p></li>
+<li><p>Default value = 100</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">epochs_gpL</span></dt><dd><ul>
+<li><p>Number of training epochs for training the Gaussian Process with linear function prior mean model</p></li>
+<li><p>Values = Integer value greater than 0</p></li>
+<li><p>Default value = 100</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">epochs_gpNN</span></dt><dd><ul>
+<li><p>Number of training epochs for training the Gaussian Process with Neural Network prior mean model</p></li>
+<li><p>Values = Integer value greater than 0</p></li>
+<li><p>Default value = 500</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+<section id="neural-network-attributes">
+<h2>Neural Network Attributes<a class="headerlink" href="#neural-network-attributes" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><span class="bglb">learning_rate</span></dt><dd><ul>
+<li><p>Learning rate for training the Neural Network model</p></li>
+<li><p>Values = Floating point in (0,1)</p></li>
+<li><p>Default value = 1e-6</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">batch_size_nn</span></dt><dd><ul>
+<li><p>Minibatch size to split up the data per epoch during the Neural Network training</p></li>
+<li><p>Values = Integer value greater than 0</p></li>
+<li><p>Default value = 5</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">epochs</span></dt><dd><ul>
+<li><p>Number of training epochs for training the Neural Network model</p></li>
+<li><p>Values = Integer value greater than 0</p></li>
+<li><p>Default value = 3000</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">l1</span></dt><dd><ul>
+<li><p>L1 regularization parameter for Neural Network weights</p></li>
+<li><p>Values = Floating point in (0,1)</p></li>
+<li><p>Default value = 0.1</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">l2</span></dt><dd><ul>
+<li><p>L2 regularization parameter for Neural Network weights</p></li>
+<li><p>Values = Floating point in (0,1)</p></li>
+<li><p>Default value = 0.4</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">num_nodes</span></dt><dd><ul>
+<li><p>Number of nodes in the first hidden layer of the Neural Network</p></li>
+<li><p>Values = Integer value greater than 0</p></li>
+<li><p>Default value = 50</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">saveModel_filename</span></dt><dd><ul>
+<li><p>File name that is used to the save the Neural Network model to be used later when fitting the Gaussian Process Neural Network model.</p></li>
+<li><p>Values = Any string literal</p></li>
+<li><p>Default value = connor_90p_chanNNarch.pt</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">saveModel_folder</span></dt><dd><ul>
+<li><p>Folder name where the abovementioned <em>saveModel_filename</em> is stored</p></li>
+<li><p>Values = Any string literal</p></li>
+<li><p>Default value = NN_savedmodels_BO/</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="acquisition-attributes">
+<h2>Acquisition Attributes<a class="headerlink" href="#acquisition-attributes" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><span class="bglb">standardize_data</span></dt><dd><ul>
+<li><p>Set to True if we want to normalize/standardize the input dataset.</p></li>
+<li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
+<li><p>Default value = <span class="lime">True</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">save_output</span></dt><dd><ul>
+<li><p>Set to true if we want to save the output of the acquisition function</p></li>
+<li><p>This is equivalent to saving the output from the Bayesian Optimization iterations.</p></li>
+<li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
+<li><p>Default value = <span class="lime">True</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">n_batch</span></dt><dd><ul>
+<li><p>Parameter for training of the acquisition function</p></li>
+<li><p>Values = Integer value greater than 0</p></li>
+<li><p>Default value = 100</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">num_restarts</span></dt><dd><ul>
+<li><p>Parameter for training of the acquisition function</p></li>
+<li><p>Values = Integer value greater than 0</p></li>
+<li><p>Default value = 10</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">raw_samples</span></dt><dd><ul>
+<li><p>Parameter for training of the acquisition function</p></li>
+<li><p>Values = Integer value greater than 0</p></li>
+<li><p>Default value = 512</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="configuration.html" class="btn btn-neutral float-left" title="Pipeline Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pi_config.html" class="btn btn-neutral float-right" title="Predictive Inference Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Clancy Group.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

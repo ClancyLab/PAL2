@@ -1,0 +1,77 @@
+---
+# General inputs
+run_folder : &home '/Users/maitreyeesharma/WORKSPACE/PostDoc/EngChem/MatDisc_ML/'  # Folder where code is run and input json exist
+output_folder : 
+- *home 
+- 'bo_output/'
+test_size : 0.9
+verbose : True
+deep_verbose : False
+
+# Reading and data processing inputs
+add_target_noise : False
+
+# Feature selection inputs
+test_size_fs : 0.1
+select_features_otherModels : True
+select_features_NN : True
+
+# BO inputs
+n_trials : 1
+n_update : 10
+GP_0_BO : True
+GP_C_BO : True
+GP_L_BO : True
+GP_NN_BO : True
+random_seed : 
+- 'iteration'
+#- 'time'
+
+# Surrogate training boolean inputs
+train_NN : True
+saveModel_NN : True 
+train_GP : True
+predict_NN : False
+
+# GP Model parameters
+kernel : 
+- 'Matern'
+#- 'RBF'
+learning_rate_gp0 : 0.1
+learning_rate_gpC : 0.1
+learning_rate_gpL : 0.1
+learning_rate_gpNN : 0.01
+
+epochs_GP0 : 100
+epochs_GPC : 100
+epochs_GPL : 100
+epochs_GPNN : 500
+
+# NN parameters
+learning_rate : 1e-6
+batch_size_nn : 5
+epochs : 30
+l1 : 0.1
+l2 : 0.4
+num_nodes : 50
+saveModel_filename : 
+- 'NN_savedmodels_BO/'
+- 'connor_90p_chanNNarch.pt'
+
+# Acquisition parameters
+standardize_data : True
+save_output : True
+n_batch : 100
+num_restarts : 10
+raw_samples : 512
+
+#Input parameters
+dataset_folder: 'new_code_connor_'
+InputType: 'PALSearch'
+InputPath: 
+- *home
+- 'datasets/'
+InputFile: 'ps-input.xlsx'
+AddTargetNoise: False
+Comment: InputType options include PerovAlloys to read the perovskite alloy dataset, PALSearch to read the PAL-search datasets, Gryffin is to read the gryffin pickle file
+...

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pipeline Configuration &mdash; PAL 2.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/hacks.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Bayesian Optimization Configuration" href="bo_config.html" />
+    <link rel="prev" title="Installation Guide" href="install.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            PAL
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="about.html">About PAL 2.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Pipeline Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#directory-attributes">Directory Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#general-attributes">General Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-attributes">Input Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#feature-selection-attributes">Feature Selection Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#surrogate-models-training-attributes">Surrogate Models Training Attributes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bo_config.html">Bayesian Optimization Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pi_config.html">Predictive Inference Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">Running PAL 2.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PAL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Pipeline Configuration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/configuration.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pipeline-configuration">
+<h1>Pipeline Configuration<a class="headerlink" href="#pipeline-configuration" title="Permalink to this heading"></a></h1>
+<p>You can change attributes in the <code class="docutils literal notranslate"><span class="pre">user_configuration.yml</span></code> file to run <strong>PAL 2.0</strong> according to your custom choice.
+The attributes for setting up the pipeline are given below:</p>
+<section id="directory-attributes">
+<h2>Directory Attributes<a class="headerlink" href="#directory-attributes" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><span class="bglb">run_folder</span></dt><dd><ul>
+<li><p>Address of the cloned repository on your system ending with a <em>/</em>, preceeded by the <code class="docutils literal notranslate"><span class="pre">home</span></code> anchor</p></li>
+<li><p>Example: C:/Users/MatDisc_ML/</p></li>
+<li><p>This is a required value, there is no default value</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">output_folder</span></dt><dd><ul>
+<li><p>List with <code class="docutils literal notranslate"><span class="pre">home</span></code> reference as first element and address of directory to save outputs of Bayesian Optimization ending with a <em>/</em> as second element</p></li>
+<li><p>Values = Any string literal for the second element</p></li>
+<li><p>Default value = bo_output/</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="general-attributes">
+<h2>General Attributes<a class="headerlink" href="#general-attributes" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><span class="bglb">test_size</span></dt><dd><ul>
+<li><p>Fraction of the unobserved materials space that needs to be explored by Bayesian Optimization.</p></li>
+<li><p>Example: If we have a total of 100 materials, then test_size = 0.9 implies, we will use 10 materials to train our surrogate models initially and then explore the remaining 90 based on Bayesian Optimization.</p></li>
+<li><p>Values = Floating point in (0,1)</p></li>
+<li><p>Default value = 0.9</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">verbose</span></dt><dd><ul>
+<li><p>Set to True if we want to print the progress of the code and Bayesian Optimization iterations without too much detail regarding the fitting process. It mainly prints out the outputs of the Bayesian Optimization iterations.</p></li>
+<li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
+<li><p>Default value = <span class="lime">True</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">deep_verbose</span></dt><dd><ul>
+<li><p>Set to True if we want to print the progress of the code and Bayesian Optimization iterations with all details including training of the Gaussian Process models, prior means and Bayesian Optimization iteration outputs.</p></li>
+<li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
+<li><p>Default value = <span class="red">False</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="input-attributes">
+<h2>Input Attributes<a class="headerlink" href="#input-attributes" title="Permalink to this heading"></a></h2>
+<ul>
+<li><dl class="simple">
+<dt><span class="bglb">dataset_folder</span></dt><dd><ul class="simple">
+<li><p>Folder name suffix to save the Bayesian Optimization output for a given data.</p></li>
+<li><p>The standard format of the output folder name is: <em>dataset_folder</em> + <em>test_size</em> + <em>p_Run</em> + Run number</p></li>
+<li><p>Values = Any string literal</p></li>
+<li><p>Default value = newDataset</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><span class="bglb">InputType</span></dt><dd><ul>
+<li><p>The format in which your dataset is stored.</p></li>
+<li><p>Values = Gryffin, PerovAlloys, PALSearch, MPEA</p></li>
+<li><p>Default value = Gryffin</p></li>
+<li><p>Given below is a table which shows the various input types and their associated file extensions:</p>
+<blockquote>
+<div><table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>InputType</p></th>
+<th class="head"><p>File Extension</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Gryffin</p></td>
+<td><p>.pkl</p></td>
+</tr>
+<tr class="row-odd"><td><p>PerovAlloys</p></td>
+<td><p>.csv</p></td>
+</tr>
+<tr class="row-even"><td><p>PALSearch</p></td>
+<td><p>.xls, .xlsx</p></td>
+</tr>
+<tr class="row-odd"><td><p>MPEA</p></td>
+<td><p>.xls, .xlsx</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">InputPath</span></dt><dd><ul class="simple">
+<li><p>List with <code class="docutils literal notranslate"><span class="pre">home</span></code> reference as first element and address for where the dataset is saved ending with a <em>/</em> as second element.</p></li>
+<li><p>Values = Name of the directory where the dataset is stored</p></li>
+<li><p>Default value = datasets/</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">InputFile</span></dt><dd><ul class="simple">
+<li><p>Name of the dataset file.</p></li>
+<li><p>Values = Filename of the dataset being used</p></li>
+<li><p>Default value = perovskites_GRYFFIN.pkl</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">AddTargetNoise</span></dt><dd><ul class="simple">
+<li><p>Set to True if we want to add a small Gaussian noise to the target property</p></li>
+<li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
+<li><p>Default value = <span class="red">False</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="feature-selection-attributes">
+<h2>Feature Selection Attributes<a class="headerlink" href="#feature-selection-attributes" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><span class="bglb">test_size_fs</span></dt><dd><ul>
+<li><p>Fraction of the data to be used to do feature selection.</p></li>
+<li><p>In the case of running Bayesian Optimization, this needs to be set the same as the <em>test_size</em> variable mentioned earlier.</p></li>
+<li><p>Values = Floating point in (0,1)</p></li>
+<li><p>Default value = 0.1</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">select_features_otherModels</span></dt><dd><ul>
+<li><p>Set to True if we want to do feature selection of input descriptors for all models other than Gaussian Process - Neural Network model.</p></li>
+<li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
+<li><p>Default value = <span class="lime">True</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">select_features_NN</span></dt><dd><ul>
+<li><p>Set to true if we want to do feature selection of input descriptors for the Gaussian Process - Neural Network model.</p></li>
+<li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
+<li><p>Default value = <span class="lime">True</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="surrogate-models-training-attributes">
+<h2>Surrogate Models Training Attributes<a class="headerlink" href="#surrogate-models-training-attributes" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><span class="bglb">train_NN</span></dt><dd><ul>
+<li><p>Set to True if we want to train the Neural Network model initial before using the Neural Network as a prior mean to fit the Gaussian Process model,</p></li>
+<li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
+<li><p>Default value = <span class="lime">True</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">saveModel_NN</span></dt><dd><ul>
+<li><p>Set to true if we want to save the Neural Network model in a file after fitting.</p></li>
+<li><p>This has to be set to True if we are training the Neural Network model with the given initial data for the first time.</p></li>
+<li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
+<li><p>Default value = <span class="lime">True</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">train_GP</span></dt><dd><ul>
+<li><p>Set to True if we want to train the Gaussian Process models</p></li>
+<li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
+<li><p>Default value = <span class="lime">True</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">predict_NN</span></dt><dd><ul>
+<li><p>Set to True if we want to use the Neural Network model to do predictions</p></li>
+<li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
+<li><p>Default value = <span class="red">False</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="install.html" class="btn btn-neutral float-left" title="Installation Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="bo_config.html" class="btn btn-neutral float-right" title="Bayesian Optimization Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Clancy Group.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

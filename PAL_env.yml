@@ -1,0 +1,22 @@
+name: PAL_env
+channels:
+  - conda-forge
+  - bioconda
+  - pytorch
+dependencies:
+  - snakemake==7.30.1 if (linux or osx)
+  - snakemake-minimal==7.30.1 if win
+  - pip
+  - pip:
+    - numpy==1.25.1
+    - pandas==2.0.3
+    - ruamel-yaml==0.17.32
+    - torch==2.0.1
+    - torchvision==0.15.2
+    - botorch==0.8.5
+    - gpytorch==1.10
+    - matplotlib==3.7.2
+    - scipy==1.11.1
+    - xgboost==1.7.6
+    - openpyxl==3.1.2
+
