@@ -1,4 +1,4 @@
-name: PAL_env_maithMB
+name: PAL_env
 channels:
   - bioconda
   - conda-forge
