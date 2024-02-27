@@ -49,4 +49,4 @@ the Department of Energy (DOE), Office of Science, Basic Energy Science (BES), u
 License
 ----------------
 
-NestedAE code and databases are distributed under terms of the [MIT License](https://github.com/ClancyLab/PAL2//blob/main/LICENSE).
+NestedAE code and databases are distributed under terms of the [MIT License](https://github.com/ClancyLab/PAL2/blob/main/LICENSE.txt).
