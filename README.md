@@ -12,7 +12,7 @@ Documentation
 
 This repository contains code to implement PAL2. It 
 was created within the CONDA enviroment, and instructions 
-for installing within it are available in the [Documentation](http://pal2.readthedocs.io/).
+for installing it are available in the [Documentation](http://pal2.readthedocs.io/).
 
 * Any questions or comments please reach out via email
 to the authors of the paper.
