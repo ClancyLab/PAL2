@@ -48,13 +48,14 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">About PAL 2.0</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">About PAL 2.0</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#citation">Citation</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Pipeline Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bo_config.html">Bayesian Optimization Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pi_config.html">Predictive Inference Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="run.html">Running PAL 2.0</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
 
         </div>
@@ -91,6 +92,12 @@ As a result, there remains a need for the development of computational algorithm
 Here, we introduce PAL 2.0, a method that combines a physics-based surrogate model with Bayesian optimization.
 The key contributing factor of our proposed framework is the ability to create a physics-based hypothesis using XGBoost and Neural Networks.
 This hypothesis provides a physics-based <a href="#id1"><span class="problematic" id="id2">``</span></a>prior’’ (or initial beliefs) to a Gaussian process model, which is then used to perform a search of the material design space.</p>
+<p>&lt;hr&gt;</p>
+<section id="citation">
+<h2>Citation<a class="headerlink" href="#citation" title="Link to this heading"></a></h2>
+<p>If you use the databases or code, please cite the paper:</p>
+<p>&gt;M. Sharma Priyadarshini, O. Romiluyi, Y. Wang, K. Miskin, C. Ganley and P. Clancy, “PAL 2.0: A Physics-Driven Bayesian Optimization Framework for Material Discovery,” <em>Mater. Horiz.</em>, <strong>11</strong>, 781, (2024). DOI: <a class="reference external" href="http://doi.org/10.1039/D3MH01474F">http://doi.org/10.1039/D3MH01474F</a></p>
+</section>
 </section>
 
 
