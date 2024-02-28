@@ -1,3 +1,5 @@
+[![Documentation Status](https://readthedocs.org/projects/pal2/badge/?version=latest)](http://pal2.readthedocs.io/)
+
 # PAL 2.0
 
 ![image](https://github.com/ClancyLab/PAL2/assets/47879658/edd85cc6-9c60-4832-b5b3-feeb94fc1361)
