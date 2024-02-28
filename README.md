@@ -13,7 +13,7 @@ Documentation
 
 This repository contains code to implement PAL2. It 
 was created within the CONDA enviroment, and instructions 
-for installing within it are available in the [Documentation](https://github.com/ClancyLab/PAL2/tree/main/docs).
+for installing within it are available in the [Documentation](http://pal2.readthedocs.io/).
 
 * For details of the datasets and how we trained NestedAE 
 please refer to the paper, noted in the "Citing" section below.
