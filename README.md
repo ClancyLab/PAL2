@@ -28,7 +28,7 @@ Contributors can be found [here](https://github.com/ClancyLab/PAL2/graphs/contri
 
 <hr>
 
-Citing
+Citation
 ----------------
 If you use the databases or code, please cite the paper:
 
