@@ -14,6 +14,6 @@ Welcome to PAL's documentation!
    install
    configuration
    bo_config
-   pi_config
+..  pi_config
    run
-   examples
+..   examples
