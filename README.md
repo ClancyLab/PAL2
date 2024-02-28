@@ -14,9 +14,6 @@ This repository contains code to implement PAL2. It
 was created within the CONDA enviroment, and instructions 
 for installing within it are available in the [Documentation](http://pal2.readthedocs.io/).
 
-* For details of the datasets and how we trained NestedAE 
-please refer to the paper, noted in the "Citing" section below.
-
 * Any questions or comments please reach out via email
 to the authors of the paper.
 
@@ -33,7 +30,7 @@ Contributors can be found [here](https://github.com/ClancyLab/PAL2/graphs/contri
 
 Citing
 ----------------
-If you use the databases or codes, please cite the paper:
+If you use the databases or code, please cite the paper:
 
 >M. Sharma Priyadarshini, O. Romiluyi, Y. Wang, K. Miskin, C. Ganley and P. Clancy, “PAL 2.0: A Physics-Driven Bayesian Optimization Framework for Material Discovery,” _Mater. Horiz._, **11**, 781, (2024). [(0.1039/D3MH01474F)](http://doi.org/10.1039/D3MH01474F)
 
@@ -50,4 +47,4 @@ the Department of Energy (DOE), Office of Science, Basic Energy Science (BES), u
 License
 ----------------
 
-NestedAE code and databases are distributed under terms of the [MIT License](https://github.com/ClancyLab/PAL2/blob/main/LICENSE.txt).
+PAL 2.0 code is distributed under terms of the [MIT License](https://github.com/ClancyLab/PAL2/blob/main/LICENSE.txt).
