@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About PAL 2.0 &mdash; PAL 2.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/hacks.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/hacks.css?v=f26da1fb" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=60dbed4a"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="author" title="About these documents" href="#" />
     <link rel="index" title="Index" href="genindex.html" />
@@ -50,6 +52,9 @@
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Pipeline Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bo_config.html">Bayesian Optimization Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pi_config.html">Predictive Inference Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">Running PAL 2.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 </ul>
 
         </div>
@@ -77,7 +82,15 @@
            <div itemprop="articleBody">
              
   <section id="about-pal-2-0">
-<h1>About PAL 2.0<a class="headerlink" href="#about-pal-2-0" title="Permalink to this heading"></a></h1>
+<h1>About PAL 2.0<a class="headerlink" href="#about-pal-2-0" title="Link to this heading"></a></h1>
+<p>The lack of efficient discovery tools for advanced functional materials remains a major bottleneck to enabling advances in the next-generation energy, health, and sustainability technologies.
+One main factor contributing to this inefficiency is the large combinatorial space of materials (with respect to material compositions and processing conditions) that is typically redolent of such materials-centric applications.
+Searches of this large combinatorial space are often influenced by expert knowledge and clustered close to material configurations that are known to perform well, thus ignoring potentially high-performing candidates in unanticipated regions of the composition-space or processing protocol.
+Moreover, experimental characterization or first principles quantum mechanical calculations of all possible material candidates can be prohibitively expensive, making exhaustive approaches to determine the best candidates infeasible.
+As a result, there remains a need for the development of computational algorithms that can efficiently search a large parameter space for a given material application.
+Here, we introduce PAL 2.0, a method that combines a physics-based surrogate model with Bayesian optimization.
+The key contributing factor of our proposed framework is the ability to create a physics-based hypothesis using XGBoost and Neural Networks.
+This hypothesis provides a physics-based <a href="#id1"><span class="problematic" id="id2">``</span></a>prior’’ (or initial beliefs) to a Gaussian process model, which is then used to perform a search of the material design space.</p>
 </section>
 
 
