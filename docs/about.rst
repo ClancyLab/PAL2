@@ -11,8 +11,6 @@ Here, we introduce PAL 2.0, a method that combines a physics-based surrogate mod
 The key contributing factor of our proposed framework is the ability to create a physics-based hypothesis using XGBoost and Neural Networks. 
 This hypothesis provides a physics-based ``prior'' (or initial beliefs) to a Gaussian process model, which is then used to perform a search of the material design space.  
 
-<hr>
-
 Citation
 ----------------
 If you use the databases or code, please cite the paper:
