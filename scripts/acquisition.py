@@ -201,9 +201,9 @@ class acquisition: # Rename this since it is the optimization framework.
                     X_train, X_test, Y_train, Y_test, Var_train, Var_test, scalerX_transform, scalerY_transform = utilsd.generate_training_data_NN(random_seed,self.test_size,snakemake.input[0])
             else:
                 if not self.additional_arguments:
-                    X_train, X_test, Y_train, Y_test, Var_train, Var_test = utilsd.generate_training_data(random_seed,self.test_size)
+                    X_train, X_test, Y_train, Y_test, Var_train, Var_test = utilsd.generate_training_data(random_seed,self.test_size,snakemake.input[0])
                 else:
-                    X_train, X_test, Y_train, Y_test, Var_train, Var_test = utilsd.generate_training_data_NN(random_seed,self.test_size)
+                    X_train, X_test, Y_train, Y_test, Var_train, Var_test = utilsd.generate_training_data_NN(random_seed,self.test_size,snakemake.input[0])
 
             if self.additional_arguments:
                 self.Train_object.train_surrogate_NN(X_train, Y_train,self.saveModel_filename,self.num_nodes,
