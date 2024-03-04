@@ -445,7 +445,7 @@ class UnifiedGPModel(gpytorch.models.ExactGP,GPyTorchModel):
         if ker=='RBF':
             self.covar_module = gpytorch.kernels.ScaleKernel(gpytorch.kernels.RBFKernel())
         elif ker=='Matern':            
-            self.covar_module = gpytorch.kernels.ScaleKernel(gpytorch.kernels.MaternKernel(nu=0.5))
+            self.covar_module = gpytorch.kernels.ScaleKernel(gpytorch.kernels.MaternKernel(nu=2.5))
 
     def forward(self, x):
         mean_x = self.mean_module(x)
