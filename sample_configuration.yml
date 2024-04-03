@@ -26,6 +26,7 @@ GP_NN_BO : True
 random_seed : 
 - 'iteration'
 #- 'time'
+maximization : True
 
 # Surrogate training boolean inputs
 train_NN : True
