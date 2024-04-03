@@ -47,14 +47,11 @@ rule bayesian_optimization:
 #         "training_logs.log"
 #     script:
 #         "scripts/acquisition.py"
-
+        
 rule feature_engineering:
     input:
-        "feature_engineering/HSE_data.csv"
-    output:
-        "feature_engineering/lasso_data.csv",
-        "feature_engineering/lasso_plot.png",
-        "feature_engineering/pearson_data.csv",
-        "feature_engineering/pearson_plot.png"
+        "user_configuration.yml"
+    log:
+        "logs/feature_engineering_logs.log"
     script:
-        "feature_engineering/feature_selection.py"
+        "scripts/feature_selection_methods.py"
