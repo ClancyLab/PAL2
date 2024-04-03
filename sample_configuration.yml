@@ -13,6 +13,8 @@ add_target_noise : False
 
 # Feature selection inputs
 test_size_fs : 0.1
+random_state : 40
+onlyImportant : False
 select_features_otherModels : True
 select_features_NN : True
 
