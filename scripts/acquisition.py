@@ -1,4 +1,4 @@
-# This file costructs surrogate models for the input datasets
+#This file performs bayesian optimization
 import numpy as np   
 import pandas as pd
 import os
