@@ -17,3 +17,5 @@ csv_paths.txt
 shift_logs.err
 shift_logs.out
 *.log
+logs/
+logs/*
