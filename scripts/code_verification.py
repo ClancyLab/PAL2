@@ -23,18 +23,17 @@ class code_verification:
         
     
     # Testing if the input format and computation of LASSO is correct
-    def test_lasso(X_stand,Y_stand,descriptors,onlyImportant=True):
+    def test_lasso(X_stand, Y_stand, descriptors, onlyImportant=True, test_size = 0.2, random_state = 40):
         
         
-        fs = feature_selection.feature_selection_algorithms(X_stand,Y_stand,test_size=0.2,random_state=40)
+        fs = feature_selection.feature_selection_algorithms(X_stand,Y_stand,test_size=test_size,random_state=random_state)
         
         search, lasso_parameters, coefficients = fs.lasso(alpha_range=np.arange(0.0001,0.01,0.0001))
-        print(search.best_params_)
+        other_data = search.best_params_
         coefficients = search.best_estimator_.named_steps['model'].coef_
         importance = np.abs(coefficients)
-        print(importance)
         feature_importance_dict = {}
-        print(descriptors)
+
         
         if onlyImportant:
             dict_keys = descriptors[importance > 0.0]
@@ -46,8 +45,8 @@ class code_verification:
                 feature_importance_dict[descriptors[i]] = importance[i]
             
         importance_df = pd.DataFrame.from_dict(data=feature_importance_dict, orient='index')
-        
-        return importance_df
+        # other_df = pd.DataFrame.from_dict(data=other_data, orient='index')
+        return importance_df, other_data
     
     # Testing if the input format and computation of SVM is correct
     def test_svm(X_stand,Y_stand):
@@ -62,9 +61,10 @@ class code_verification:
         return
         
     # Testing if the input format and computation of pearson correlation coefficients is correct
-    def test_pearson_corr_coeff(X_stand, Y_stand, descriptors, onlyImportant=True):
+    def test_pearson_corr_coeff(X_stand, Y_stand, descriptors, onlyImportant=True, test_size = 0.2, random_state = 40):
         
-        fs = feature_selection.feature_selection_algorithms(X_stand,Y_stand,test_size=0.2,random_state=40)
+        fs = feature_selection.feature_selection_algorithms(X_stand,Y_stand,test_size=test_size,random_state=random_state)
+        Y_stand = Y_stand.reshape(len(Y_stand))
         rho = fs.pearson_corr_coeff(X_stand,Y_stand)
         
         feature_importance_dict={}
@@ -79,25 +79,28 @@ class code_verification:
             
         importance_df = pd.DataFrame.from_dict(data=feature_importance_dict, orient='index')
         
-        print(rho)
-        
         return importance_df
     
-    def test_xgboost(X_stand, Y_stand, descriptors, onlyImportant=True):
-        fs = feature_selection.feature_selection_algorithms(X_stand,Y_stand,test_size=0.1,random_state=40)
+    def test_xgboost(X_stand, Y_stand, descriptors, onlyImportant=True, test_size = 0.2, random_state = 40):
+        fs = feature_selection.feature_selection_algorithms(X_stand,Y_stand,test_size=test_size,random_state=random_state)
         
+        other_data = dict()
         clf = fs.xgboost()
         score = clf.score(fs.X_train, fs.y_train)
-        print("Training score: ", score)
+        other_data['training_score'] = score
+        # print("Training score: ", score)
 
         scores = cross_val_score(clf, fs.X_train, fs.y_train,cv=10)
-        print("Mean cross-validation score: %.2f" % scores.mean())
+        other_data['cross_val_score'] = scores.mean()
+        # print("Mean cross-validation score: %.2f" % scores.mean())
 
 
         ypred = clf.predict(fs.X_test)
         mse = mean_squared_error(fs.y_test, ypred)
-        print("MSE: %.2f" % mse)
-        print("RMSE: %.2f" % (mse**(1/2.0)))
+        other_data['MSE'] = mse
+        other_data['RMSE'] = mse**(1/2.0)
+        # print("MSE: %.2f" % mse)
+        # print("RMSE: %.2f" % (mse**(1/2.0)))
 
         f_importance = clf.get_booster().get_score(importance_type='gain')
         feature_importance_dict={}
@@ -106,7 +109,7 @@ class code_verification:
             for f,value in f_importance.items():
                 feature_index = int(f.split('f')[1])
                 feature_importance_dict[descriptors[feature_index]] = value
-                print(f"Column: {feature_index}, descriptor: {descriptors[feature_index]}")
+                # print(f"Column: {feature_index}, descriptor: {descriptors[feature_index]}")
         
         # XGBoost gives scores only for features that were retained
         # The following peice of code sets the score to 0 for the remaining features
@@ -127,6 +130,7 @@ class code_verification:
                 feature_importance_dict[descriptors[f]] = f_importance['f'+str(f)]       
         
         importance_df = pd.DataFrame.from_dict(data=feature_importance_dict, orient='index')
-        importance_df.plot.bar(logy=False)
+        other_df = pd.DataFrame.from_dict(data=other_data, orient='index')
+        # importance_df.plot.bar(logy=False)
         
-        return
+        return importance_df, clf
