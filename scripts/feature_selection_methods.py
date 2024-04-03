@@ -4,16 +4,13 @@ import copy
 import random 
 import pandas as pd
 import scipy
-import sklearn as sk
+import os
 
 import xgboost as xgb
 from xgboost.sklearn import XGBRegressor
+
+import sklearn as sk
 from sklearn.metrics import mean_squared_error
-
-# User defined files and classes
-import utils_dataset as utilsd
-import code_verification as verification
-
 from sklearn.model_selection import cross_validate
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.model_selection import cross_val_score
@@ -22,6 +19,20 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import Lasso
 
+# User defined files and classes
+import input_class
+import utils_dataset as utilsd
+import code_verification as verification
+
+# Plotting
+import matplotlib.pyplot as plt
+
+# Data reading specific modules
+import json
+import ruamel.yaml
+
+# Write log files
+import sys
 
 class feature_selection_algorithms:
 
@@ -113,29 +124,104 @@ class feature_selection_algorithms:
                 
     
 if __name__=="__main__":
-    data = pd.read_csv('/Users/maitreyeesharma/WORKSPACE/PostDoc/EngChem/HEMI/chan_code/perovs_dft_ml/HSE_data.csv')
-    #descriptors indicating composition (formula)
-    Comp_desc = pd.DataFrame(data, columns=['K', 'Rb', 'Cs', 'MA', 'FA', 'Ca', 'Sr', 'Ba', 'Ge', 'Sn', 'Pb', 'Cl', 'Br', 'I'])
-    #descriptors using elemental properties (ionic radii, density etc.)
-    Elem_desc = pd.DataFrame(data, columns=['A_ion_rad', 'A_BP', 'A_MP', 'A_dens', 'A_at_wt', 'A_EA', 'A_IE', 'A_hof', 'A_hov', 'A_En', 
-                                            'A_at_num', 'A_period', 'B_ion_rad', 'B_BP', 'B_MP', 'B_dens', 'B_at_wt', 'B_EA', 'B_IE', 'B_hof', 
-                                            'B_hov', 'B_En', 'B_at_num', 'B_period', 'X_ion_rad', 'X_BP', 'X_MP', 'X_dens', 'X_at_wt', 
-                                            'X_EA', 'X_IE', 'X_hof', 'X_hov', 'X_En', 'X_at_num', 'X_period'])
-    #combined descriptors
-    All_desc = pd.DataFrame(data, columns=['K', 'Rb', 'Cs', 'MA', 'FA', 'Ca', 'Sr', 'Ba', 'Ge', 'Sn', 'Pb', 'Cl', 'Br', 'I', 'A_ion_rad', 
-                                           'A_BP', 'A_MP', 'A_dens', 'A_at_wt', 'A_EA', 'A_IE', 'A_hof', 'A_hov', 'A_En', 'A_at_num', 'A_period', 
-                                           'B_ion_rad', 'B_BP', 'B_MP', 'B_dens', 'B_at_wt', 'B_EA', 'B_IE', 'B_hof', 'B_hov', 'B_En', 'B_at_num', 
-                                           'B_period', 'X_ion_rad', 'X_BP', 'X_MP', 'X_dens', 'X_at_wt', 'X_EA', 'X_IE', 'X_hof', 'X_hov', 'X_En', 
-                                           'X_at_num', 'X_period'])
+    sys.stdout = open(snakemake.log[0],'w')
+    
+    #Reading user input values
+    with open(snakemake.input[0],'r') as f:
+        input_dict=ruamel.yaml.safe_load(f)
 
-    HSE_gap_copy = copy.deepcopy(data.Gap.to_numpy())
-    YY=HSE_gap_copy.reshape(-1,1)
-    XX = copy.deepcopy(Elem_desc.to_numpy())
-    
-    X_stand = utilsd.standardize_data(XX)
-    Y_stand = utilsd.standardize_data(YY)
-    
+    input_type = input_dict['InputType']
+    input_path = input_dict['InputPath'][0]+input_dict['InputPath'][1]
+    input_file = input_dict['InputFile']
+    add_target_noise = input_dict['AddTargetNoise']
+    test_size = input_dict['test_size_fs']
+    random_state = input_dict['random_state']
+    onlyImportant = input_dict['onlyImportant']
+    output_dir = input_dict['output_folder'][0]+input_dict['output_folder'][1]
+
+    input = input_class.inputs(input_type=input_type,
+                                input_path=input_path,
+                                input_file=input_file,
+                                add_target_noise=add_target_noise)
+
+    XX, YY, descriptors = input.read_inputs(input_dict['verbose'])
+
+    # Transforming datasets by standardization
+    if input_dict['standardize_data']:
+        X_stand, scalerX_transform = utilsd.standardize_data(XX)
+        Y_stand, scalerY_transform = utilsd.standardize_data(YY)
+    else:
+        X_stand=XX.to_numpy()
+        Y_stand = YY
+
     tests = verification.code_verification
-    tests.test_lasso(X_stand,Y_stand,Elem_desc.columns)
-    # tests.test_svm(X_stand,Y_stand)
-    tests.test_pearson_corr_coeff(X_stand,Y_stand)
+
+
+    ## Create new output dir to write all output:
+    newpath = output_dir + 'feature_engineering/'
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
+
+    ## Adjust plots format
+    plt.tight_layout()
+
+    ## Lasso:
+    lasso_df, model = tests.test_lasso(X_stand,Y_stand,descriptors, onlyImportant = onlyImportant, test_size = test_size, random_state = random_state)
+    # lasso_df.to_csv(newpath + snakemake.output[0], index=True)
+    lasso_df.to_csv(newpath + 'lasso_data.csv', index=True)
+    fig = plt.figure(figsize=(7, 5.5))
+    ax = fig.add_subplot(111)
+    ax.bar(descriptors,lasso_df[0])
+    ax.set_ylabel('Descriptor Importance')
+    plt.xticks(range(len(descriptors)),descriptors,rotation=90)
+    plt.rcParams.update({'font.size': 20})
+    ax.tick_params(direction='out')
+    # Adjust layout
+    plt.tight_layout()
+    plt.savefig(newpath + 'lasso_plot.pdf', bbox_inches='tight')
+
+    plt.show()
+    
+    # with open(newpath + snakemake.output[2], 'w') as f:
+    #     json.dump(model, f)
+    with open(newpath + 'lasso_model.json', 'w') as f:
+        json.dump(model, f)
+
+
+    ## XGboost:
+    xgboost_df, clf = tests.test_xgboost(X_stand,Y_stand,descriptors, onlyImportant = onlyImportant, test_size = test_size, random_state = random_state)
+    # xgboost_df.to_csv(newpath + snakemake.output[3],index=True)
+    xgboost_df.to_csv(newpath + 'xgboost_data.csv',index=True)
+    fig = plt.figure(figsize=(7, 5.5))
+    ax = fig.add_subplot(111)
+    ax.bar(descriptors,xgboost_df[0])
+    ax.set_ylabel('Descriptor Importance')
+    plt.xticks(range(len(descriptors)),descriptors,rotation=90)
+    plt.rcParams.update({'font.size': 20})
+    ax.tick_params(direction='out')
+    # Adjust layout
+    plt.tight_layout()
+    plt.savefig(newpath + 'xgboost_plot.pdf', bbox_inches='tight')
+
+    plt.show()
+    
+    # clf.save_model(newpath + snakemake.output[5])
+    clf.save_model(newpath + 'xgboost_model.json')
+
+
+    ## Pearson:
+    pearson_df = tests.test_pearson_corr_coeff(X_stand,Y_stand,descriptors, onlyImportant = onlyImportant, test_size = test_size, random_state = random_state)
+    # pearson_df.to_csv(newpath + snakemake.output[6],index=True)
+    pearson_df.to_csv(newpath + 'pearson_data.csv',index=True)
+    fig = plt.figure(figsize=(7, 5.5))
+    ax = fig.add_subplot(111)
+    ax.bar(descriptors,pearson_df[0])
+    ax.set_ylabel('Descriptor Importance')
+    plt.xticks(range(len(descriptors)),descriptors,rotation=90)
+    plt.rcParams.update({'font.size': 20})
+    ax.tick_params(direction='out')
+    # Adjust layout
+    plt.tight_layout()
+    plt.savefig(newpath + 'pearson_plot.pdf', bbox_inches='tight')
+
+    plt.show()
