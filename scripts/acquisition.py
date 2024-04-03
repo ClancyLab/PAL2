@@ -107,6 +107,10 @@ class acquisition: # Rename this since it is the optimization framework.
     def bo_iteration(self, acq_func, X_train, X_test, Y_train, Y_test):
 
         best_observed=[]
+        new_x_observed=[]
+        new_y_observed=[]
+        index_observed=[]
+        
         # run N_BATCH rounds of BayesOpt after the initial random batch
         for iteration in range(1, self.n_batch + 1):
             if ((iteration-1)%self.n_update==0):
@@ -124,65 +128,123 @@ class acquisition: # Rename this since it is the optimization framework.
             X_train = torch.cat([X_train, new_x])
             Y_train = torch.cat([Y_train[0], new_y[0]])
             Y_train = torch.reshape(Y_train,(1,Y_train.shape[0]))
-
+            
+            # Get inverse transform for the normalized data and index of the recommended points in the dataset
+            new_x_inv_transformed = scalerX_transform.inverse_transform(new_x[0].numpy().reshape(1, -1), copy=None)
+            new_y_inv_transformed = scalerY_transform.inverse_transform(new_y[0].numpy().reshape(1, -1), copy=None)
+            
+            b = [1 if torch.all(X_test[i].eq(new_x)) else 0 for i in range(0,X_test.shape[0])]
+            b = torch.tensor(b).to(torch.int)
+            index = b.nonzero()[0][0]
+            
             # update progress
             best_value_ei = Y_train.max()
             best_observed.append(best_value_ei)
+            new_x_observed.append(new_x_inv_transformed[0])
+            index_observed.append(index.numpy())
+            new_y_observed.append(new_y_inv_transformed[0][0])
 
-            # AcqFunc_0 = UpperConfidenceBound(model_gp0, beta=0.1) 
-            acq_func = ExpectedImprovement(model=model_gp, best_f=best_value_ei)
+            acq_func = ExpectedImprovement(model=model_gp, best_f=best_value_ei, maximize=self.maximization)
 
             if self.verbose:
                 print(
                     f"\nBatch {iteration:>2}: best_value = {best_value_ei:>4.2f}",end="",)
 
-        return best_observed
+        return best_observed, new_x_observed, new_y_observed, index_observed
     
     
-    def best_in_initial_data(self, X_train, X_test, Y_train, Y_test): # need to rename this function. It is finding the best in initial data but also calls the bo_iteration function
+    def best_in_initial_data(self, X_train, X_test, Y_train, Y_test, scalerX_transform, scalerY_transform): # need to rename this function. It is finding the best in initial data but also calls the bo_iteration function
     
         best_observed = []
+        new_x_observed=[]
+        new_y_observed=[]
+        index_observed=[]
+        
         # Finding best value in initial data
-        best_observed_value = Y_train.max()
-        optimal_solution = torch.cat([Y_train[0],Y_test[0]]).max()
-        if (best_observed_value.eq(optimal_solution)):
+        if self.maximization:
+            best_observed_value = Y_train.max()
+            optimal_solution = torch.cat([Y_train[0],Y_test[0]]).max()
+        else:
+            best_observed_value = Y_train.min()
+            optimal_solution = torch.cat([Y_train[0],Y_test[0]]).min()
+
+        # If optimal value is present in the initial dataset sample remove it  
+        if (best_observed_value.eq(optimal_solution)) and self.maximization:
             print('Max in training set, removing it before training models.')
-            max_position = torch.argmax(Y_train)
+            optimal_position = torch.argmax(Y_train)
 
             # Add max value to test/exploration set
-            X_add_toTest = torch.reshape(X_train[max_position,:],(1,X_train.shape[1]))
+            X_add_toTest = torch.reshape(X_train[optimal_position,:],(1,X_train.shape[1]))
             X_test = torch.cat([X_test,X_add_toTest])
             Y_add_toTest = torch.reshape(optimal_solution,(1,1))      
             Y_test = torch.cat((Y_test,Y_add_toTest),1)
 
             # Remove max value from training set
-            X_train = X_train[torch.arange(0, X_train.shape[0]) != max_position, ...]
-            Y_train = Y_train[..., torch.arange(0, Y_train.shape[1]) != max_position]
+            X_train = X_train[torch.arange(0, X_train.shape[0]) != optimal_position, ...]
+            Y_train = Y_train[..., torch.arange(0, Y_train.shape[1]) != optimal_position]
 
             # Update best observed value
             best_observed_value = Y_train.max()
+
+        elif (best_observed_value.eq(optimal_solution)) and not self.maximization:
+            print('Min in training set, removing it before training models.')
+            optimal_position = torch.argmin(Y_train)
+
+            # Add min value to test/exploration set
+            X_add_toTest = torch.reshape(X_train[optimal_position,:],(1,X_train.shape[1]))
+            X_test = torch.cat([X_test,X_add_toTest])
+            Y_add_toTest = torch.reshape(optimal_solution,(1,1))      
+            Y_test = torch.cat((Y_test,Y_add_toTest),1)
+
+            # Remove min value from training set
+            X_train = X_train[torch.arange(0, X_train.shape[0]) != optimal_position, ...]
+            Y_train = Y_train[..., torch.arange(0, Y_train.shape[1]) != optimal_position]
+
+            # Update best observed value
+            best_observed_value = Y_train.min()
 
         # Initialize likelihood and model
         likelihood_gp = gpytorch.likelihoods.GaussianLikelihood()
         model_gp = self.gp_model(X_train, Y_train, likelihood_gp, self.kernel, *self.additional_arguments)
 
         # Initializing acquisition function for the models
-        AcqFunc = ExpectedImprovement(model=model_gp, best_f=best_observed_value)
+        AcqFunc = ExpectedImprovement(model=model_gp, best_f=best_observed_value, maximize=self.maximization)
         best_observed.append(best_observed_value)
-        best_observed.extend(self.bo_iteration(AcqFunc, X_train, X_test, Y_train, Y_test))
+        best_observed_bo, new_x_observed, new_y_observed, index_observed = self.bo_iteration(AcqFunc, X_train, X_test, 
+                                                                                             Y_train, Y_test, scalerX_transform, scalerY_transform)
+        best_observed.extend(best_observed_bo)
     
-        return best_observed
+        return best_observed, new_x_observed, new_y_observed, index_observed
 
     
     def generate_csv(self, best_observed_all):
         best_observed_df = pd.DataFrame((np.array(best_observed_all).T[:self.n_batch,:]), columns = list(range(1, self.n_trials + 1))).add_prefix('trial_')
-        best_observed_df.to_csv(self.run_folder+self.model_name+'.csv',index=False)
+        best_observed_df.to_csv(self.run_folder+self.model_name+'_best_target_observed_normalized.csv',index=False)
         with open(snakemake.output[0],'a') as f:
-            f.write(self.run_folder+self.model_name+".csv\n")
+            f.write(self.run_folder+self.model_name+"_best_target_observed_normalized.csv\n")
+        
+        x_observed_df = pd.DataFrame((np.array(x_observed_all).T[:self.n_batch,:]), columns = list(range(1, self.n_trials + 1))).add_prefix('trial_')
+        x_observed_df.to_csv(self.run_folder+self.model_name+'_x_observed.csv',index=False)
+        with open(snakemake.output[0],'a') as f:
+            f.write(self.run_folder+self.model_name+"_x_observed.csv\n")
+            
+        y_observed_df = pd.DataFrame((np.array(y_observed_all).T[:self.n_batch,:]), columns = list(range(1, self.n_trials + 1))).add_prefix('trial_')
+        y_observed_df.to_csv(self.run_folder+self.model_name+'_y_observed.csv',index=False)
+        with open(snakemake.output[0],'a') as f:
+            f.write(self.run_folder+self.model_name+"_y_observed.csv\n")
+            
+        index_observed_df = pd.DataFrame((np.array(y_observed_all).T[:self.n_batch,:]), columns = list(range(1, self.n_trials + 1))).add_prefix('trial_')
+        index_observed_df.to_csv(self.run_folder+self.model_name+'_index_observed.csv',index=False)
+        with open(snakemake.output[0],'a') as f:
+            f.write(self.run_folder+self.model_name+"_index_observed.csv\n")
         
         
     def data_generation(self):
         best_observed_all = []
+        x_observed_all = []
+        y_observed_all = []
+        index_observed_all = []
+        
         # Average over multiple trials
         for trial in range(1, self.n_trials + 1):
             t0 = time.monotonic()
@@ -211,14 +273,15 @@ class acquisition: # Rename this since it is the optimization framework.
                                                  self.saveModel_NN)
 
             # Appending to common list of best observed values, with number of rows equal to number of trials
-            best_observed_all.append(self.best_in_initial_data(X_train, X_test, Y_train, Y_test))
+            best_observed_all, x_observed_all, y_observed_all, index_observed_all = self.best_in_initial_data(X_train, X_test, Y_train, Y_test, 
+                                                                                                              scalerX_transform, scalerY_transform)
 
             t1 = time.monotonic()
 
             print(f"\ntime = {t1-t0:>4.2f}.\n")
 
         if self.save_output:
-            self.generate_csv(best_observed_all)
+            self.generate_csv(best_observed_all, x_observed_all, y_observed_all, index_observed_all)
             
         
     def model_decision(self,decisions):
@@ -323,6 +386,7 @@ class acquisition: # Rename this since it is the optimization framework.
         self.batch_size_nn = self.check(att,'batch_size_nn','C') 
         self.num_restarts = self.check(att,'num_restarts','C') 
         self.raw_samples = self.check(att,'raw_samples','C') 
+        self.maximization = self.check(att,'maximization','A')
         
         #Attributes needed for generate_csv()
         self.run_folder = att['run_folder']
