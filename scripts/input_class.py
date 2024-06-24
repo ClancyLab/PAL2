@@ -55,7 +55,9 @@ class inputs:
         elif self.input_type == 'Gryffin':
             XX, YY, descriptors = self.read_gryffin()            
         elif self.input_type == 'MPEA':
-            XX, YY, descriptors = self.read_MPEA()    
+            XX, YY, descriptors = self.read_MPEA()
+        elif self.input_type == 'connor-polymers':
+            XX, YY, descriptors = self.read_connor_polymers()
         return XX, YY, descriptors
     
     def read_MPEA(self):
@@ -213,6 +215,19 @@ class inputs:
         # YY = -1.0*YY
         
         return XX, YY, perov_desc.columns
+
+    def read_connor_polymers(self):
+        xls = pd.ExcelFile(self.filename)
+        Data_DF1 = pd.read_excel(xls, 'pal-input-elec-props-only')
+
+        XX = Data_DF1.drop(columns=['Identifier', 'Target-Gsolv'], axis=1)
+        YY = Data_DF1['Target-Gsolv'].to_numpy().reshape(-1,1)
+
+        descriptors = np.array(Data_DF1.columns[2:])
+
+        # print(XX, YY, descriptors)
+
+        return XX, YY, descriptors
 
 
 if __name__=="__main__":
