@@ -104,13 +104,17 @@ class acquisition: # Rename this since it is the optimization framework.
         return new_x, new_y, index, X_test_new, Y_test_new
 
     
-    def bo_iteration(self, acq_func, X_train, X_test, Y_train, Y_test):
+    def bo_iteration(self, acq_func, X_train, X_test, Y_train, Y_test,scalerX_transform,scalerY_transform):
 
         best_observed=[]
         new_x_observed=[]
         new_y_observed=[]
         index_observed=[]
         
+        # Doing this so that we can extract the index in the dataset for the point recommended by BO
+        X_test_all = X_test
+        Y_test_all = Y_test
+            
         # run N_BATCH rounds of BayesOpt after the initial random batch
         for iteration in range(1, self.n_batch + 1):
             if ((iteration-1)%self.n_update==0):
@@ -133,7 +137,7 @@ class acquisition: # Rename this since it is the optimization framework.
             new_x_inv_transformed = scalerX_transform.inverse_transform(new_x[0].numpy().reshape(1, -1), copy=None)
             new_y_inv_transformed = scalerY_transform.inverse_transform(new_y[0].numpy().reshape(1, -1), copy=None)
             
-            b = [1 if torch.all(X_test[i].eq(new_x)) else 0 for i in range(0,X_test.shape[0])]
+            b = [1 if torch.all(X_test_all[i].eq(new_x)) else 0 for i in range(0,X_test_all.shape[0])]
             b = torch.tensor(b).to(torch.int)
             index = b.nonzero()[0][0]
             
@@ -217,16 +221,17 @@ class acquisition: # Rename this since it is the optimization framework.
         return best_observed, new_x_observed, new_y_observed, index_observed
 
     
-    def generate_csv(self, best_observed_all):
+    def generate_csv(self, best_observed_all,x_observed_all, y_observed_all, index_observed_all):
         best_observed_df = pd.DataFrame((np.array(best_observed_all).T[:self.n_batch,:]), columns = list(range(1, self.n_trials + 1))).add_prefix('trial_')
         best_observed_df.to_csv(self.run_folder+self.model_name+'_best_target_observed_normalized.csv',index=False)
         with open(snakemake.output[0],'a') as f:
             f.write(self.run_folder+self.model_name+"_best_target_observed_normalized.csv\n")
         
-        x_observed_df = pd.DataFrame((np.array(x_observed_all).T[:self.n_batch,:]), columns = list(range(1, self.n_trials + 1))).add_prefix('trial_')
-        x_observed_df.to_csv(self.run_folder+self.model_name+'_x_observed.csv',index=False)
-        with open(snakemake.output[0],'a') as f:
-            f.write(self.run_folder+self.model_name+"_x_observed.csv\n")
+        print(np.size(x_observed_all))
+        # x_observed_df = pd.DataFrame((np.array(x_observed_all).T[:self.n_batch,:]), columns = list(range(1, self.n_trials + 1))).add_prefix('trial_')
+        # x_observed_df.to_csv(self.run_folder+self.model_name+'_x_observed.csv',index=False)
+        # with open(snakemake.output[0],'a') as f:
+        #     f.write(self.run_folder+self.model_name+"_x_observed.csv\n")
             
         y_observed_df = pd.DataFrame((np.array(y_observed_all).T[:self.n_batch,:]), columns = list(range(1, self.n_trials + 1))).add_prefix('trial_')
         y_observed_df.to_csv(self.run_folder+self.model_name+'_y_observed.csv',index=False)
@@ -240,10 +245,10 @@ class acquisition: # Rename this since it is the optimization framework.
         
         
     def data_generation(self):
-        best_observed_all = []
-        x_observed_all = []
-        y_observed_all = []
-        index_observed_all = []
+        best_observed_all_trials = []
+        x_observed_all_trials = []
+        y_observed_all_trials = []
+        index_observed_all_trials = []
         
         # Average over multiple trials
         for trial in range(1, self.n_trials + 1):
@@ -273,15 +278,20 @@ class acquisition: # Rename this since it is the optimization framework.
                                                  self.saveModel_NN)
 
             # Appending to common list of best observed values, with number of rows equal to number of trials
-            best_observed_all, x_observed_all, y_observed_all, index_observed_all = self.best_in_initial_data(X_train, X_test, Y_train, Y_test, 
-                                                                                                              scalerX_transform, scalerY_transform)
+            best_observed_per_trial, x_observed_per_trial, y_observed_per_trial, index_observed_per_trial = self.best_in_initial_data(X_train, X_test, 
+                                                                                                            Y_train, Y_test, 
+                                                                                                            scalerX_transform, scalerY_transform)
 
             t1 = time.monotonic()
-
+            best_observed_all_trials.append(best_observed_per_trial)
+            x_observed_all_trials.append(x_observed_per_trial)
+            y_observed_all_trials.append(y_observed_per_trial)
+            index_observed_all_trials.append(index_observed_per_trial)
+            
             print(f"\ntime = {t1-t0:>4.2f}.\n")
 
         if self.save_output:
-            self.generate_csv(best_observed_all, x_observed_all, y_observed_all, index_observed_all)
+            self.generate_csv(best_observed_all_trials, x_observed_all_trials, y_observed_all_trials, index_observed_all_trials)
             
         
     def model_decision(self,decisions):
