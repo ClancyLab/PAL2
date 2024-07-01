@@ -19,3 +19,5 @@ shift_logs.out
 *.log
 logs/
 logs/*
+*.txt
+*~
