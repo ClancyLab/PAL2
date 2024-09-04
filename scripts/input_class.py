@@ -55,8 +55,16 @@ class inputs:
         elif self.input_type == 'Gryffin':
             XX, YY, descriptors = self.read_gryffin()            
         elif self.input_type == 'MPEA':
-            XX, YY, descriptors = self.read_MPEA()    
+            XX, YY, descriptors = self.read_MPEA()
         return XX, YY, descriptors
+    
+#    def read_ClancyLab(self):
+
+#        XX ---> Inputs to your surrogate
+#        YY --> Target material property
+#        descriptors --> String with physiochemical properties of XX.
+        
+#        return XX, YY, descriptors
     
     def read_MPEA(self):
         '''
@@ -215,6 +223,17 @@ class inputs:
         return XX, YY, perov_desc.columns
 
 
+    def read_connor_polymers(self):
+        xls = pd.ExcelFile(self.filename)
+        df = pd.read_excel(xls, 'pal-dimer+1solv-388')
+
+        XX = df.drop(columns=['Solvent-Label', 'Polymer-Label', 'Identifier', 'Target (eV)'], axis=1)
+        YY = df['Target (eV)'].to_numpy().reshape(-1,1)
+
+        descriptors = np.array(df.columns[4:])
+
+        return XX, YY, descriptors
+    
 if __name__=="__main__":
     
     run_folder = '/Users/maitreyeesharma/WORKSPACE/PostDoc/EngChem/MatDisc_ML/feature_engineering/'
