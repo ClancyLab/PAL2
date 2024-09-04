@@ -56,6 +56,8 @@ class inputs:
             XX, YY, descriptors = self.read_gryffin()            
         elif self.input_type == 'MPEA':
             XX, YY, descriptors = self.read_MPEA()
+        elif self.input_type == 'connor-polymers':
+            XX, YY, descriptors = self.read_connor_polymers()
         return XX, YY, descriptors
     
 #    def read_ClancyLab(self):
