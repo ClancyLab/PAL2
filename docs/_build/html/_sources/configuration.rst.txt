@@ -85,6 +85,14 @@ Feature Selection Attributes
     * Set to true if we want to do feature selection of input descriptors for the Gaussian Process - Neural Network model.
     * Values = :lime:`True` or :red:`False`
     * Default value = :lime:`True`
+- :bglb:`random_state`
+    * This is used to set the seed to dividing the dataset into train and test sets for feature engineering.
+    * Values = :lime:`Any Real Positive Number`
+    * Default value = :lime:`40`
+- :bglb:`onlyImportant`
+    * Set to true if we want to output only features selected from the list of input features. 
+    * Values = :lime:`True` or :red:`False`
+    * Default value = :lime:`False`
 
 ------------------------------------
 Surrogate Models Training Attributes

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Running PAL 2.0 &mdash; PAL 2.0 documentation</title>
+  <title>Running closed-loop framework &mdash; PAL 2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b76e3c8a" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/hacks.css?v=f26da1fb" />
@@ -23,8 +23,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Running closed-loop framework" href="run_closedloop.html" />
-    <link rel="prev" title="Bayesian Optimization Configuration" href="bo_config.html" /> 
+    <link rel="prev" title="Running PAL 2.0" href="run.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -52,8 +51,8 @@
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Pipeline Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bo_config.html">Bayesian Optimization Configuration</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Running PAL 2.0</a></li>
-<li class="toctree-l1"><a class="reference internal" href="run_closedloop.html">Running closed-loop framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">Running PAL 2.0</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Running closed-loop framework</a></li>
 </ul>
 
         </div>
@@ -70,9 +69,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Running PAL 2.0</li>
+      <li class="breadcrumb-item active">Running closed-loop framework</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/run.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/run_closedloop.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -80,50 +79,32 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="running-pal-2-0">
-<h1>Running PAL 2.0<a class="headerlink" href="#running-pal-2-0" title="Link to this heading"></a></h1>
+  <section id="running-closed-loop-framework">
+<h1>Running closed-loop framework<a class="headerlink" href="#running-closed-loop-framework" title="Link to this heading"></a></h1>
 <ol class="arabic">
-<li><p>After configuring the attributes in the <code class="docutils literal notranslate"><span class="pre">user_configuration.yml</span></code> file, save the file.</p></li>
-<li><p>Open <strong>Anaconda Prompt</strong> and navigate to the directory where you’ve cloned the repository, i.e., the <code class="docutils literal notranslate"><span class="pre">run_folder</span></code> attribute in the YAML file.</p></li>
+<li><p>Configure the attributes in the <code class="docutils literal notranslate"><span class="pre">surrogate_models_input.py</span></code> file, save the file.</p></li>
+<li><p>Open <strong>Anaconda Prompt</strong> and navigate to the directory where you’ve cloned the repository, i.e., the <code class="docutils literal notranslate"><span class="pre">run_folder</span></code> attribute in the input file..</p></li>
 <li><p>Make sure that the <strong>PAL_env</strong> environment is activated</p></li>
-<li><p>Running the Snakefile:</p>
+<li><p>Running the code:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>To perform Bayesian Optimization, run the following command:</p></li>
+<li><p>To perform Bayesian Optimization, run the following jupyter notebook:</p></li>
 </ul>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>snakemake<span class="w"> </span>--cores<span class="w"> </span><span class="m">1</span><span class="w"> </span>perform_bo
-</pre></div>
-</div>
-</div></blockquote>
-<ul class="simple">
-<li><p>To perform Predictive Inference, run the following command:</p></li>
-</ul>
-<blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>snakemake<span class="w"> </span>--cores<span class="w"> </span><span class="m">1</span><span class="w"> </span>perform_pi
-</pre></div>
-</div>
-</div></blockquote>
-<ul class="simple">
-<li><p>To perform Feature Engineering, run the following command:</p></li>
-</ul>
-<blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>snakemake<span class="w"> </span>--cores<span class="w"> </span><span class="m">1</span><span class="w"> </span>feature_engineering
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>acquitision_function_bo-ClosedLoop.ipynb
 </pre></div>
 </div>
 </div></blockquote>
 </div></blockquote>
 </li>
 </ol>
-<p>A text file <code class="docutils literal notranslate"><span class="pre">success.txt</span></code> would be created in the same directory if the task is performed successfully.</p>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="bo_config.html" class="btn btn-neutral float-left" title="Bayesian Optimization Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="run_closedloop.html" class="btn btn-neutral float-right" title="Running closed-loop framework" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="run.html" class="btn btn-neutral float-left" title="Running PAL 2.0" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

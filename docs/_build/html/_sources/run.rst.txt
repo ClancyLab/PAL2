@@ -20,4 +20,11 @@ Running PAL 2.0
 
       snakemake --cores 1 perform_pi
 
+
+    - To perform Feature Engineering, run the following command:
+ 
+     .. code-block:: bash
+
+      snakemake --cores 1 feature_engineering
+
 A text file ``success.txt`` would be created in the same directory if the task is performed successfully.

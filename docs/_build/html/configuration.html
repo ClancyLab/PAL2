@@ -59,9 +59,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="bo_config.html">Bayesian Optimization Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pi_config.html">Predictive Inference Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="run.html">Running PAL 2.0</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run_closedloop.html">Running closed-loop framework</a></li>
 </ul>
 
         </div>
@@ -251,6 +250,24 @@ The attributes for setting up the pipeline are given below:</p>
 <li><p>Set to true if we want to do feature selection of input descriptors for the Gaussian Process - Neural Network model.</p></li>
 <li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
 <li><p>Default value = <span class="lime">True</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">random_state</span></dt><dd><ul>
+<li><p>This is used to set the seed to dividing the dataset into train and test sets for feature engineering.</p></li>
+<li><p>Values = <span class="lime">Any Real Positive Number</span></p></li>
+<li><p>Default value = <span class="lime">40</span></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><span class="bglb">onlyImportant</span></dt><dd><ul>
+<li><p>Set to true if we want to output only features selected from the list of input features.</p></li>
+<li><p>Values = <span class="lime">True</span> or <span class="red">False</span></p></li>
+<li><p>Default value = <span class="lime">False</span></p></li>
 </ul>
 </dd>
 </dl>

@@ -15,5 +15,6 @@ Welcome to PAL's documentation!
    configuration
    bo_config
    run
+   run_closedloop
 ..  pi_config
 ..   examples
