@@ -13,3 +13,4 @@ Running closed-loop framework
 	
       acquitision_function_bo-ClosedLoop.ipynb
 
+The code for the closed-loop PAL 2.0 framework can be found at https://github.com/ClancyLab/MPEA_PAL2
